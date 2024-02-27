@@ -1,4 +1,4 @@
-namespace ESFJobBoard.API.Enums
+namespace ESFJobBoard.Core.Enums
 {
     public enum UserTypeEnum
     {

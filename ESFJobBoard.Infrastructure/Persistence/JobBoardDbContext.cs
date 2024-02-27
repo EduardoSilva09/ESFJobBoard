@@ -1,8 +1,8 @@
 using System.Reflection;
-using ESFJobBoard.API.Model;
+using ESFJobBoard.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace ESFJobBoard.API.DAO
+namespace ESFJobBoard.Infrastructure.Persistence
 {
     public class JobBoardDbContext : DbContext
     {
@@ -12,6 +12,9 @@ namespace ESFJobBoard.API.DAO
         public DbSet<User> Users { get; set; }
         public DbSet<Job> Jobs { get; set; }
         public DbSet<JobApplication> Applications { get; set; }
-
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        }
     }
 }

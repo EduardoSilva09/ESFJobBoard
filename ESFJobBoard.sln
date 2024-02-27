@@ -5,6 +5,12 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFJobBoard.API", "ESFJobBoard.API\ESFJobBoard.API.csproj", "{23AC8E3F-7888-47C2-A7D2-E73B6AC2C33F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFJobBoard.Core", "ESFJobBoard.Core\ESFJobBoard.Core.csproj", "{8422A8D6-68EE-4986-A1D0-B0EF7FB3C534}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFJobBoard.Infrastructure", "ESFJobBoard.Infrastructure\ESFJobBoard.Infrastructure.csproj", "{7739F005-ED64-4EFA-967C-9D24CE4090F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFJobBoard.Application", "ESFJobBoard.Application\ESFJobBoard.Application.csproj", "{2FB67082-02BE-4EB9-8E7C-A7FEF9DD72D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +24,17 @@ Global
 		{23AC8E3F-7888-47C2-A7D2-E73B6AC2C33F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23AC8E3F-7888-47C2-A7D2-E73B6AC2C33F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23AC8E3F-7888-47C2-A7D2-E73B6AC2C33F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8422A8D6-68EE-4986-A1D0-B0EF7FB3C534}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8422A8D6-68EE-4986-A1D0-B0EF7FB3C534}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8422A8D6-68EE-4986-A1D0-B0EF7FB3C534}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8422A8D6-68EE-4986-A1D0-B0EF7FB3C534}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7739F005-ED64-4EFA-967C-9D24CE4090F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7739F005-ED64-4EFA-967C-9D24CE4090F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7739F005-ED64-4EFA-967C-9D24CE4090F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7739F005-ED64-4EFA-967C-9D24CE4090F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FB67082-02BE-4EB9-8E7C-A7FEF9DD72D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FB67082-02BE-4EB9-8E7C-A7FEF9DD72D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FB67082-02BE-4EB9-8E7C-A7FEF9DD72D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FB67082-02BE-4EB9-8E7C-A7FEF9DD72D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

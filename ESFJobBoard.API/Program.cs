@@ -1,4 +1,6 @@
-using ESFJobBoard.API.DAO;
+using ESFJobBoard.Core.Repository;
+using ESFJobBoard.Infrastructure.Persistence;
+using ESFJobBoard.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +13,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<JobBoardDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("ESFJobBoardCS")));
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IJobRepository, JobRepository>();
+builder.Services.AddScoped<IJobApplicationRepository, JobApplicationRepository>();
 
 var app = builder.Build();
 
