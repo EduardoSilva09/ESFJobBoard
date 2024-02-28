@@ -23,10 +23,11 @@ namespace ESFJobBoard.Infrastructure.Persistence.Repositories
             return await _dbContext.Jobs.ToListAsync();
         }
 
-        public async Task AddJobAsync(Job job)
+        public async Task<int> AddJobAsync(Job job)
         {
             _dbContext.Jobs.Add(job);
             await _dbContext.SaveChangesAsync();
+            return job.Id;
         }
 
         public async Task UpdateJobAsync(Job job)

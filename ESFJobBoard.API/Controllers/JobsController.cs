@@ -1,5 +1,11 @@
+using ESFJobBoard.Application.Commands.CreateJob;
+using ESFJobBoard.Application.Commands.DeleteJob;
+using ESFJobBoard.Application.Commands.UpdateJob;
+using ESFJobBoard.Application.Queries.GetAllJobs;
+using ESFJobBoard.Application.Queries.GetJobById;
 using ESFJobBoard.Core.Entities;
-using ESFJobBoard.Core.Repository;
+using ESFJobBoard.Core.Exceptions;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESFJobBoard.API.Controllers
@@ -8,74 +14,73 @@ namespace ESFJobBoard.API.Controllers
     [Route("api/[controller]")]
     public class JobsController : ControllerBase
     {
-        private readonly IJobRepository _jobRepository;
+        private readonly IMediator _mediator;
 
-        public JobsController(IJobRepository jobRepository)
+        public JobsController(IMediator mediator)
         {
-            _jobRepository = jobRepository;
+            _mediator = mediator;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetJobs()
         {
-            var jobs = await _jobRepository.GetJobsAsync();
+            var query = new GetAllJobsQuery();
+            var jobs = await _mediator.Send(query);
             return Ok(jobs);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetJobById(int id)
         {
-            var job = await _jobRepository.GetJobByIdAsync(id);
+            var query = new GetJobByIdQuery { JobId = id };
+            var result = await _mediator.Send(query);
 
-            if (job == null)
+            if (result == null)
             {
                 return NotFound();
             }
 
-            return Ok(job);
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostJob([FromBody] Job job)
+        public async Task<ActionResult<int>> PostJob([FromBody] Job job)
         {
-            if (ModelState.IsValid)
-            {
-                await _jobRepository.AddJobAsync(job);
-                return CreatedAtAction(nameof(GetJobById), new { id = job.Id }, job);
-            }
-
-            return BadRequest(ModelState);
+            var command = new CreateJobCommand { Job = job };
+            var jobId = await _mediator.Send(command);
+            return Ok(jobId);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateJob(int id, [FromBody] Job job)
+        public async Task<IActionResult> UpdateJob(int id, [FromBody] UpdateJobCommand command)
         {
-            if (id != job.Id)
-            {
-                return BadRequest();
-            }
+            command.JobId = id;
 
-            if (ModelState.IsValid)
+            try
             {
-                await _jobRepository.UpdateJobAsync(job);
+                await _mediator.Send(command);
                 return NoContent();
             }
-
-            return BadRequest(ModelState);
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteJob(int id)
         {
-            var existingJob = await _jobRepository.GetJobByIdAsync(id);
+            var command = new DeleteJobCommand { JobId = id };
 
-            if (existingJob == null)
+            try
             {
-                return NotFound();
+                await _mediator.Send(command);
+                return NoContent();
             }
-
-            await _jobRepository.DeleteJobAsync(id);
-            return NoContent();
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
     }
 }

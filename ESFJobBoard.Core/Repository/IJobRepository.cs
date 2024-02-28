@@ -6,7 +6,7 @@ namespace ESFJobBoard.Core.Repository
     {
         Task<Job?> GetJobByIdAsync(int jobId);
         Task<IEnumerable<Job>> GetJobsAsync();
-        Task AddJobAsync(Job job);
+        Task<int> AddJobAsync(Job job);
         Task UpdateJobAsync(Job job);
         Task DeleteJobAsync(int jobId);
     }
