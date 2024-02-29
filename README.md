@@ -1,23 +1,55 @@
 # ESFJobBoard API Documentation
 
-## Jobs Endpoint
+## Jobs Controller
 
-### Get Jobs
-- **Description:** Retrieve a list of available jobs.
-- **Endpoint:** `GET /api/jobs`
+### Get All Jobs
+
+- **HTTP Verb:** GET
+- **Description:** Retrieve a list of all jobs.
+- **Endpoint:** `/api/jobs`
 - **Response:**
-  - Status Code: `200 OK`
-  - Body: List of job objects.
+  - **Status Code:** 200 OK
+  - **Body:** Array of Job objects.
 
-### Post Job
-- **Description:** Post a new job listing.
-- **Endpoint:** `POST /api/jobs`
+### Get Job by ID
+
+- **HTTP Verb:** GET
+- **Description:** Retrieve a job by its ID.
+- **Endpoint:** `/api/jobs/{id}`
+- **Response:**
+  - **Status Code:** 200 OK
+  - **Body:** Job object.
+
+### Create Job
+
+- **HTTP Verb:** POST
+- **Description:** Create a new job.
+- **Endpoint:** `/api/jobs`
 - **Request Body:**
-  - Content Type: `application/json`
-  - Body: Job object (Title, Description, etc.).
+  - Title (string)
+  - Description (string)
 - **Response:**
-  - Status Code: `201 Created`
-  - Body: Job object of the created job listing.
+  - **Status Code:** 201 Created
+  - **Body:** ID of the created job.
+
+### Update Job
+
+- **HTTP Verb:** PUT
+- **Description:** Update an existing job.
+- **Endpoint:** `/api/jobs/{id}`
+- **Request Body:**
+  - Title (string)
+  - Description (string)
+- **Response:**
+  - **Status Code:** 204 No Content
+
+### Delete Job
+
+- **HTTP Verb:** DELETE
+- **Description:** Delete a job by its ID.
+- **Endpoint:** `/api/jobs/{id}`
+- **Response:**
+  - **Status Code:** 204 No Content
 
 ## Applications Controller
 
@@ -46,8 +78,7 @@
 - **Endpoint:** `/api/applications`
 - **Request Body:**
   - JobId (int)
-  - JobSeekerId (int)
-  - // Other application properties
+  - JobSeekerId (int)  
 - **Response:**
   - **Status Code:** 201 Created
   - **Body:** ID of the created job application.
