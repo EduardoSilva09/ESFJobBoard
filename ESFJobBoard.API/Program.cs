@@ -1,4 +1,5 @@
 using ESFJobBoard.Application.Commands.CreateJob;
+using ESFJobBoard.Application.Queries.GetAllJobs;
 using ESFJobBoard.Core.Repository;
 using ESFJobBoard.Infrastructure.Persistence;
 using ESFJobBoard.Infrastructure.Persistence.Repositories;
@@ -18,7 +19,7 @@ builder.Services.AddDbContext<JobBoardDbContext>(options =>
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJobRepository, JobRepository>();
 builder.Services.AddScoped<IJobApplicationRepository, JobApplicationRepository>();
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateJobCommand).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllJobsQuery).Assembly));
 
 var app = builder.Build();
 

@@ -1,5 +1,13 @@
+using ESFJobBoard.Application.Commands.CreateJobApplication;
+using ESFJobBoard.Application.Commands.UpdateJobApplication;
+using ESFJobBoard.Application.Commands.WithdrawJobApplication;
+using ESFJobBoard.Application.Queries.GetAllJobApplications;
+using ESFJobBoard.Application.Queries.GetApplicationsByJobId;
+using ESFJobBoard.Application.Queries.GetApplicationsByJobSeekerId;
+using ESFJobBoard.Application.Queries.GetJobApplicationById;
 using ESFJobBoard.Core.Entities;
-using ESFJobBoard.Core.Repository;
+using ESFJobBoard.Core.Exceptions;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESFJobBoard.API.Controllers
@@ -8,88 +16,98 @@ namespace ESFJobBoard.API.Controllers
     [Route("api/[controller]")]
     public class ApplicationsController : ControllerBase
     {
-        private readonly IJobApplicationRepository _applicationRepository;
+        private readonly IMediator _mediator;
 
-        public ApplicationsController(IJobApplicationRepository applicationRepository)
+        public ApplicationsController(IMediator mediator)
         {
-            _applicationRepository = applicationRepository;
+            _mediator = mediator;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetApplications()
+        public async Task<ActionResult<List<JobApplication>>> GetAllApplications()
         {
-            var applications = await _applicationRepository.GetApplicationsAsync();
-            return Ok(applications);
+            var query = new GetAllJobApplicationsQuery();
+            var result = await _mediator.Send(query);
+
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetApplicationById(int id)
+        public async Task<ActionResult<JobApplication>> GetApplicationById(int id)
         {
-            var application = await _applicationRepository.GetJobApplicationAsync(id);
+            var query = new GetJobApplicationByIdQuery { ApplicationId = id };
+            var result = await _mediator.Send(query);
 
-            if (application == null)
+            if (result == null)
             {
                 return NotFound();
             }
 
-            return Ok(application);
+            return Ok(result);
         }
 
         [HttpGet("job/{jobId}")]
         public async Task<IActionResult> GetApplicationsByJobId(int jobId)
         {
-            var applications = await _applicationRepository.GetApplicationsByJobIdAsync(jobId);
-            return Ok(applications);
+            var query = new GetApplicationsByJobIdQuery { JobId = jobId };
+            var result = await _mediator.Send(query);
+
+            return Ok(result);
         }
 
         [HttpGet("jobseeker/{jobSeekerId}")]
         public async Task<IActionResult> GetApplicationsByJobSeekerId(int jobSeekerId)
         {
-            var applications = await _applicationRepository.GetApplicationsByJobSeekerIdAsync(jobSeekerId);
-            return Ok(applications);
+            var query = new GetApplicationsByJobSeekerIdQuery { JobSeekerId = jobSeekerId };
+            var result = await _mediator.Send(query);
+
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostApplication([FromBody] JobApplication application)
+        public async Task<IActionResult> PostApplication([FromBody] CreateJobApplicationCommand command)
         {
-            if (ModelState.IsValid)
+            try
             {
-                await _applicationRepository.AddJobApplicationAsync(application);
-                return CreatedAtAction(nameof(GetApplicationById), new { id = application.Id }, application);
+                var result = await _mediator.Send(command);
+                return CreatedAtAction(nameof(GetApplicationById), new { id = result }, result);
             }
-
-            return BadRequest(ModelState);
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateApplication(int id, [FromBody] JobApplication application)
+        public async Task<IActionResult> UpdateApplication(int id, [FromBody] UpdateJobApplicationCommand command)
         {
-            if (id != application.Id)
-            {
-                return BadRequest();
-            }
+            command.ApplicationId = id;
 
-            if (ModelState.IsValid)
+            try
             {
-                await _applicationRepository.UpdateJobApplicationAsync(application);
+                await _mediator.Send(command);
                 return NoContent();
             }
-
-            return BadRequest(ModelState);
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteApplication(int id)
         {
-            var existingApplication = await _applicationRepository.GetJobApplicationAsync(id);
+            var command = new WithdrawJobApplicationCommand { ApplicationId = id };
 
-            if (existingApplication == null)
+            try
             {
-                return NotFound();
+                await _mediator.Send(command);
+                return NoContent();
             }
-
-            await _applicationRepository.DeleteJobApplicationAsync(id);
-            return NoContent();
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
     }
 }
