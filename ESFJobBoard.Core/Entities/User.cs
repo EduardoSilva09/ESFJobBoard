@@ -2,19 +2,17 @@ using ESFJobBoard.Core.Enums;
 
 namespace ESFJobBoard.Core.Entities
 {
-    public class User : BaseEntity
+    public class User(string firstName, string lastName, string email, string username, string password, UserTypeEnum userType) : BaseEntity
     {
-        public User(string username, string password, UserTypeEnum userType)
-        {
-            Username = username;
-            Password = password;
-            UserType = userType;
-        }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public UserTypeEnum UserType { get; set; }
-        // Navigation properties
-        public ICollection<JobApplication> Applications { get; set; }
+        public string FirstName { get; set; } = firstName;
+        public string LastName { get; set; } = lastName;
+        public string Email { get; set; } = email;
+        public string Username { get; set; } = username;
+        public string Password { get; set; } = password;
+        public UserTypeEnum UserType { get; set; } = userType;
+        public DateTime CreatedAt { get; private set; } = DateTime.Now;
+        // Navigation properties        
+        public ICollection<JobApplication> Applications { get; set; } = [];
     }
 
 }

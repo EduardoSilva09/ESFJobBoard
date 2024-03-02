@@ -1,5 +1,10 @@
-using ESFJobBoard.Core.Entities;
-using ESFJobBoard.Core.Repository;
+using ESFJobBoard.Application.Commands.CreateUser;
+using ESFJobBoard.Application.Commands.DeleteUser;
+using ESFJobBoard.Application.Commands.UpdateUser;
+using ESFJobBoard.Application.Queries.GetUserById;
+using ESFJobBoard.Application.Queries.GetUsers;
+using ESFJobBoard.Core.Exceptions;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESFJobBoard.API.Controllers
@@ -8,24 +13,27 @@ namespace ESFJobBoard.API.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IMediator _mediator;
 
-        public UsersController(IUserRepository userRepository)
+        public UsersController(IMediator mediator)
         {
-            _userRepository = userRepository;
+            _mediator = mediator;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
-            var users = await _userRepository.GetAllUsersAsync();
+            var query = new GetUsersQuery();
+            var users = await _mediator.Send(query);
+
             return Ok(users);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(int id)
         {
-            var user = await _userRepository.GetUserByIdAsync(id);
+            var query = new GetUserByIdQuery { UserId = id };
+            var user = await _mediator.Send(query);
 
             if (user == null)
             {
@@ -36,46 +44,41 @@ namespace ESFJobBoard.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostUser([FromBody] User user)
+        public async Task<IActionResult> PostUser([FromBody] CreateUserCommand command)
         {
-            if (ModelState.IsValid)
-            {
-                await _userRepository.AddUserAsync(user);
-                return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
-            }
+            var userId = await _mediator.Send(command);
 
-            return BadRequest(ModelState);
+            return CreatedAtAction(nameof(GetUserById), new { id = userId }, userId);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] User user)
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserCommand command)
         {
-            if (id != user.Id)
+            command.UserId = id;
+            try
             {
-                return BadRequest();
-            }
-
-            if (ModelState.IsValid)
-            {
-                await _userRepository.UpdateUserAsync(user);
+                await _mediator.Send(command);
                 return NoContent();
             }
-
-            return BadRequest(ModelState);
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var existingUser = await _userRepository.GetUserByIdAsync(id);
-
-            if (existingUser == null)
+            var command = new DeleteUserCommand { UserId = id };
+            try
             {
-                return NotFound();
+                await _mediator.Send(command);
+                return NoContent();
             }
-
-            await _userRepository.DeleteUserAsync(id);
-            return NoContent();
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
     }
 }

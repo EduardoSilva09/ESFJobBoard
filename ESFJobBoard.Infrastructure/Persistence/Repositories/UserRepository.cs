@@ -12,7 +12,6 @@ namespace ESFJobBoard.Infrastructure.Persistence.Repositories
         {
             _dbContext = dbContext;
         }
-
         public async Task<User?> GetUserByIdAsync(int userId)
         {
             return await _dbContext.Users.FindAsync(userId);
@@ -35,14 +34,10 @@ namespace ESFJobBoard.Infrastructure.Persistence.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteUserAsync(int userId)
+        public async Task DeleteUserAsync(User user)
         {
-            var userToRemove = await _dbContext.Users.FindAsync(userId);
-            if (userToRemove != null)
-            {
-                _dbContext.Users.Remove(userToRemove);
-                await _dbContext.SaveChangesAsync();
-            }
+            _dbContext.Users.Remove(user);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<User>> GetAllUsersAsync()

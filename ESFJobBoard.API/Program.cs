@@ -1,4 +1,3 @@
-using ESFJobBoard.Application.Commands.CreateJob;
 using ESFJobBoard.Application.Queries.GetAllJobs;
 using ESFJobBoard.Core.Repository;
 using ESFJobBoard.Infrastructure.Persistence;

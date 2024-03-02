@@ -35,6 +35,18 @@ namespace ESFJobBoard.Infrastructure.Persistence.Configurations
                 .HasColumnType("int")
                 .IsRequired();
 
+            builder.Property(u => u.Email)
+                .IsRequired()
+                .HasMaxLength(200); // Set the appropriate max length
+
+            builder.Property(u => u.FirstName)
+                .IsRequired()
+                .HasMaxLength(100); // Set the appropriate max length
+
+            builder.Property(u => u.LastName)
+                .IsRequired()
+                .HasMaxLength(100); // Set the appropriate max length
+
             // Navigation properties
             builder.HasMany(u => u.Applications)
                 .WithOne(ja => ja.JobSeeker)

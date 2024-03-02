@@ -13,7 +13,7 @@ namespace ESFJobBoard.Core.Repository
         // Update user information
         Task UpdateUserAsync(User user);
         // Delete a user from the repository
-        Task DeleteUserAsync(int userId);
+        Task DeleteUserAsync(User user);
         // Get all users in the repository
         Task<IEnumerable<User>> GetAllUsersAsync();
     }
