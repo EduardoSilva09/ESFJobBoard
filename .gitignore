@@ -5,3 +5,4 @@ ESFJobBoard.Infrastructure/Persistence/Migrations/20240302185024_UpdatedUser.cs
 ESFJobBoard.Infrastructure/Persistence/Migrations/20240302185024_UpdatedUser.Designer.cs
 ESFJobBoard.Infrastructure/Persistence/Migrations/JobBoardDbContextModelSnapshot.cs
 ESFJobBoard.Infrastructure/Persistence/Migrations/JobBoardDbContextModelSnapshot.cs
+ESFJobBoard.Infrastructure/Persistence/Migrations/JobBoardDbContextModelSnapshot.cs

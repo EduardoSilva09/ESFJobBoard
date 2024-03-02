@@ -1,3 +1,42 @@
+# Project Overview
+
+## Patterns
+
+The project follows certain design patterns to enhance maintainability, scalability, and code organization:
+
+- **CQRS (Command Query Responsibility Segregation):**
+  - The project uses the CQRS pattern to separate the read and write operations, allowing for more flexible and scalable architecture.
+
+- **Repository Pattern:**
+  - Repositories are employed to abstract the data access layer, promoting a clean separation between business logic and data operations.
+
+- **Mediator Pattern:**
+  - MediatR is used as a mediator library to implement the mediator pattern, facilitating communication between components, particularly for command and query handling.
+
+## Technologies
+
+The project leverages the following technologies and frameworks:
+
+- **ASP.NET Core:**
+  - The backend is developed using ASP.NET Core, providing a cross-platform, high-performance framework for building modern, cloud-based, and internet-connected applications.
+
+- **Entity Framework Core:**
+  - Entity Framework Core is utilized as the Object-Relational Mapping (ORM) tool, simplifying database interactions and providing a clean data access layer.
+
+- **MediatR:**
+  - MediatR is employed for implementing the mediator pattern, facilitating communication between different parts of the application.
+
+- **Microsoft SQL Server:**
+  - The project uses Microsoft SQL Server as the relational database management system.
+
+## Resources
+
+The following resources were instrumental in the development of this project:
+
+- [ASP.NET Core Documentation](https://docs.microsoft.com/en-us/aspnet/core/)
+- [Entity Framework Core Documentation](https://docs.microsoft.com/en-us/ef/core/)
+- [MediatR Documentation](https://github.com/jbogard/MediatR)
+
 # ESFJobBoard API Documentation
 
 ## Jobs Controller
@@ -119,41 +158,55 @@
   - **Status Code:** 200 OK
   - **Body:** Array of JobApplication objects.
 
-# Project Overview
+## Users Controller
 
-## Patterns
+### Get All Users
 
-The project follows certain design patterns to enhance maintainability, scalability, and code organization:
+- **HTTP Verb:** GET
+- **Description:** Retrieves a list of all users. 
+- **Endpoint:** `/api/users`
+- **Response:**
+  - **Status Code:** 200 OK
 
-- **CQRS (Command Query Responsibility Segregation):**
-  - The project uses the CQRS pattern to separate the read and write operations, allowing for more flexible and scalable architecture.
+### Get User by ID
 
-- **Repository Pattern:**
-  - Repositories are employed to abstract the data access layer, promoting a clean separation between business logic and data operations.
+- **HTTP Verb:** GET
+- **Description:** Retrieves a user by their ID. 
+- **Endpoint:** `/api/users/{id}`
+- **Response:**
+  - **Status Code:** 200 OK
 
-- **Mediator Pattern:**
-  - MediatR is used as a mediator library to implement the mediator pattern, facilitating communication between components, particularly for command and query handling.
+### Create User
 
-## Technologies
+- **HTTP Verb:** POST
+- **Description:** Creates a new user. 
+- **Endpoint:** `/api/users`
+- **Request Body:**
+  - FirstName (String)
+  - LastName (String)
+  - Email (String)
+  - Username (String)
+  - Password (String)
+  - UserType (Int)
+- **Response:**
+  - **Status Code:** 201 Created
 
-The project leverages the following technologies and frameworks:
+### Update User
 
-- **ASP.NET Core:**
-  - The backend is developed using ASP.NET Core, providing a cross-platform, high-performance framework for building modern, cloud-based, and internet-connected applications.
+- **HTTP Verb:** PUT
+- **Description:** Updates an existing user by ID. Requires updated user details in the request body.
+- **Endpoint:** `/api/users/{id}`
+- **Request Body:**
+  - FirstName (String)
+  - LastName (String)
+  - Email (String)
+- **Response:**
+  - **Status Code:** 204 No Content
 
-- **Entity Framework Core:**
-  - Entity Framework Core is utilized as the Object-Relational Mapping (ORM) tool, simplifying database interactions and providing a clean data access layer.
+### Delete User
 
-- **MediatR:**
-  - MediatR is employed for implementing the mediator pattern, facilitating communication between different parts of the application.
-
-- **Microsoft SQL Server:**
-  - The project uses Microsoft SQL Server as the relational database management system.
-
-## Resources
-
-The following resources were instrumental in the development of this project:
-
-- [ASP.NET Core Documentation](https://docs.microsoft.com/en-us/aspnet/core/)
-- [Entity Framework Core Documentation](https://docs.microsoft.com/en-us/ef/core/)
-- [MediatR Documentation](https://github.com/jbogard/MediatR)
+- **HTTP Verb:** DELETE
+- **Description:** Deletes a user by ID. Returns no content.
+- **Endpoint:** `/api/users/{id}`
+- **Response:**
+  - **Status Code:** 204 No Content
